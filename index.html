@@ -121,28 +121,6 @@
             font-size: 12px;
             color: rgba(255,255,255,0.3);
         }
-        .listeners {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: rgba(255,255,255,0.4);
-        }
-        .listeners .dot {
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #1db954;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(0.8); }
-        }
-        .listeners .count {
-            font-weight: 600;
-            color: rgba(255,255,255,0.6);
-        }
         .bottom-time { font-size: 12px; color: rgba(255,255,255,0.25); }
 
         .footer-note {
@@ -213,7 +191,7 @@
     </div>
 
     <div class="cover-wrap">
-        <img id="cover" src="https://upload.wikimedia.org/wikipedia/en/a/a5/Kanyewest_collegedropout.jpg" alt="Обложка">
+        <img id="cover" src="https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" alt="Обложка">
     </div>
 
     <div class="track-info">
@@ -242,29 +220,69 @@
     </div>
 
     <div class="bottom-row">
-        <div class="listeners">
-            <span class="dot"></span>
-            <span class="count" id="listenersCount">0</span> Online
-        </div>
         <span class="bottom-time" id="bottomTime">--:--</span>
     </div>
 
     <div class="footer-note">
-        <span>We don't make money. Just isten to the music.</span>
+        ❤️ <span>не зарабатывает</span> · просто музыка
     </div>
 </div>
 
 <script>
-    // ===== НАСТРОЙКИ =====
-    // songs.txt на Dropbox (прямая ссылка)
-    const SONGS_URL = 'https://dl.dropboxusercontent.com/s/rhjtxvzh7o87jele9mzym/songs.txt?rlkey=x8zajubaozhhgx7bvt2ck6pfc&st=8mdips92&dl=1';
-    // ИЛИ: https://www.dropbox.com/s/.../songs.txt?dl=1
+    // ===== ВСЕ ТРЕКИ =====
+    const TRACKS = [
+        { file: "https://ia601900.us.archive.org/17/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/02%20-%20We%20Don%27t%20Care.mp3", artist: "Kanye West", title: "We Don't Care", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/05%20-%20I%27ll%20Fly%20Away.mp3", artist: "Kanye West", title: "I'll Fly Away", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/06%20-%20Spaceship.mp3", artist: "Kanye West", title: "Spaceship", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/07%20-%20Jesus%20Walks.mp3", artist: "Kanye West", title: "Jesus Walks", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/08%20-%20Never%20Let%20Me%20Down.mp3", artist: "Kanye West", title: "Never Let Me Down", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/09%20-%20Get%20Em%20High.mp3", artist: "Kanye West", title: "Get Em High", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/12%20-%20Slow%20Jamz.mp3", artist: "Kanye West", title: "Slow Jamz", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/20%20-%20Family%20Business.mp3", artist: "Kanye West", title: "Family Business", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/01.%20Good%20Morning.mp3", artist: "Kanye West", title: "Good Morning", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://ia800508.us.archive.org/22/items/kanyewest-graduation/02.%20Champion.mp3", artist: "Kanye West", title: "Champion", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/03.%20Stronger.mp3", artist: "Kanye West", title: "Stronger", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/04.%20I%20Wonder.mp3", artist: "Kanye West", title: "I Wonder", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/05.%20Good%20Life%20%28Feat.%20T-Pain%29.mp3", artist: "Kanye West and T-Pain", title: "Good Life", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/06.%20Can%27t%20Tell%20Me%20Nothing.mp3", artist: "Kanye West", title: "Can't Tell Me Nothing", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/07.%20Barry%20Bonds%20%28Feat.%20Lil%27%20Wayne%29.mp3", artist: "Kanye West and Lil' Wayne", title: "Barry Bonds", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/08.%20Drunk%20%26%20Hot%20Girls%20%28Feat.%20Mos%20Def%29.mp3", artist: "Kanye West and Mos Def", title: "Drunk & Hot Girls", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/09.%20Flashing%20Lights%20%28Feat.%20Dwele%29.mp3", artist: "Kanye West and Dwele", title: "Flashing Lights", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/10.%20Everything%20I%20Am%20%28Feat.%20DJ%20Premier%29.mp3", artist: "Kanye West and DJ Premier", title: "Everything I Am", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/11.%20The%20Glory.mp3", artist: "Kanye West", title: "The Glory", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/12.%20Homecoming.mp3", artist: "Kanye West", title: "Homecoming", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/13.%20Big%20Brother.mp3", artist: "Kanye West", title: "Big Brother", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://ia902904.us.archive.org/33/items/lateregistration_202605/02.%20Heard%20%27Em%20Say%20%28Feat.%20Adam%20Levine%29.mp3", artist: "Kanye West and Adam Levine", title: "Heard 'Em Say", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg" },
+        { file: "https://dn711101.ca.archive.org/0/items/lateregistration_202605/03.%20Touch%20The%20Sky%20%28Feat.%20Lupe%20Fiasco%29.mp3", artist: "Kanye West and Lupe Fiasco", title: "Touch The Sky", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg" },
+        { file: "https://dn711101.ca.archive.org/0/items/lateregistration_202605/06.%20Drive%20Slow%20%28Feat.%20Paul%20Wall%20%26%20GLC%29.mp3", artist: "Kanye West and Paul Wall, GLC", title: "Drive Slow", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/14.%20Good%20Night%20%28Feat.%20Al%20Be%20Back%20%26%20Mos%20Def%29.mp3", artist: "Kanye West and Al Be Back, Mos Def", title: "Good Night", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/civh81wpwh4bypezj39sw/SWIFT.mp3?rlkey=ebdkygrwwo4rvwsaem5jhlr7f&st=9eicdlxb&dl=1", artist: "CMH", title: "SWIFT", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/kumq0ygky7cjixb2f4633/MI-FIT.mp3?rlkey=4qmcm21yl59ylwi0nvtep25ar&st=45khmct0&dl=1", artist: "CMH", title: "MI$FIT$", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/9gamhz2r7vpswqaukrqkw/RAWW.mp3?rlkey=l4o6tr3w9pgw0ao2287yb7p6j&st=akfrntba&dl=1", artist: "CMH", title: "RAWW", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/5oxqtlc1ujddanzfoq7fv/KUVALDA.mp3?rlkey=z2lycujjke3ixddiuoqvpal0e&st=1snusca6&dl=1", artist: "CMH", title: "KUVALDA", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/9wtam14oni95e52ejxoub/CMH-TYPE-BEAT.mp3?rlkey=nmlkifqkgwz0y7hsqsqz8xs73&st=lachu8z2&dl=1", artist: "CMH", title: "CMH TYPE BEAT", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/quvab3f6lgfxyrw1fazo5/WRONG.mp3?rlkey=ik49ezdtetvqwmwdhfxrepr6c&st=g90255ay&dl=1", artist: "CMH", title: "WRONG", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/jj3f0386h7dz9ca8tqi8i/01.mp3?rlkey=31zy0unq0swoom6nica7ygtan&st=36pctxxm&dl=1", artist: "madk1d", title: "так похуй", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/kjxq57vu2trbryl2luoo1/02-Ft..mp3?rlkey=t52wy8mkcgptioxijmaq0cwdw&st=eb60mco5&dl=1", artist: "madk1d and паранойя", title: "цена", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/r6w8s6fbtn6i6n2j14hdr/03-Ft..mp3?rlkey=vtj79v4h3o9z5132ofsfs0ix9&st=6maytwuw&dl=1", artist: "madk1d and тёмный принц", title: "ты че обиделась", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/osifd9ofaimckiotlgrbd/04.mp3?rlkey=7mnc8o7fyh4mt3fs4wlonvmq1&st=zpkuzvdi&dl=1", artist: "madk1d", title: "супермаркет", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/e9ojiowkpp2mzxj1tmftl/05.mp3?rlkey=2csie1dg0mnzblr29ws8jy93q&st=bi1qja88&dl=1", artist: "madk1d", title: "засосы", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/hlug20o83yj0yu13ou21z/06-Sexyswag2010.mp3?rlkey=k5edj857bnaqmxja4fx2b8xzh&st=bihogfrq&dl=1", artist: "madk1d", title: "sexyswag2010", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/kgyqrtky8nmfeu5i7i7yw/07.mp3?rlkey=z2wnik7v54uylq1gzp1s5pmpz&st=a81m80m4&dl=1", artist: "madk1d", title: "сдвг", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/xm17d4vpfpkvva0g1mig7/08-Ft.-GRILLYAZH.mp3?rlkey=lyz5s2omuhpmhn0vx0cuvic9y&st=h6v8c39s&dl=1", artist: "madk1d and GRILLYAZH", title: "последним летом", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/cq1odnlrw0zx7wt4ypt1d/09.mp3?rlkey=sq86dwug1ogdk3wl0ihtni702&st=nvikjk2k&dl=1", artist: "madk1d", title: "танцор", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/mfcb82l609uwzd87081ck/01-madk1d-Cupsize.mp3?rlkey=wlcwtgxk75sy6kiokrnzff3ab&st=xkw5mjyh&dl=1", artist: "madk1d and CUPSIZE", title: "Круче чем вы", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/bnk1ykw71tj80s8tsp5p9/01.mp3?rlkey=j3dt72hx7bk57xucusz8dj3jk&st=dii465ke&dl=1", artist: "madk1d", title: "типичная ситуация", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/5a5j3sle28zq74qmrsxkq/02-1-Ft.-Cupsize.mp3?rlkey=dd5fd402gqucyw2ir5eweerr9&st=kv43jqyc&dl=1", artist: "madk1d and CUPSIZE", title: "1 мая", cover: "" },
+        { file: "https://dn720309.ca.archive.org/0/items/sewerslvt-skitzofrenia-simulation/Sewerslvt%20-%20Skitzofrenia%20Simulation%20-%2009%20Slvtcrvsher.mp3", artist: "Sewerslvt", title: "Slvtcrvsher", cover: "" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/x1mfzc9e6nk6uymeh845a/bbno-1-800-feat.-Ironmouse.mp3?rlkey=9irhuwf64mqnktfmjebo2sz16&st=lkyjxu4p&dl=1", artist: "bbno$", title: "1-800", cover: "" },
+        { file: "https://dn720800.ca.archive.org/0/items/gs_bbnogames-check-feat-hatsune-miku/01%20check%20%28feat.%20Hatsune%20Miku%29.mp3", artist: "bbno$ and Hatsune Miku", title: "Check", cover: "" }
+    ];
 
-    let tracks = [];
+    // ===== КОД ПЛЕЕРА =====
     let currentTrackIndex = 0;
     let playing = false;
     let isDragging = false;
-    let listenersCount = 0;
 
     const audio = new Audio();
     const container = document.getElementById('container');
@@ -275,20 +293,8 @@
     const timeCurrent = document.getElementById('timeCurrent');
     const timeTotal = document.getElementById('timeTotal');
     const waves = document.getElementById('waves');
-    const listenersEl = document.getElementById('listenersCount');
     const bottomTime = document.getElementById('bottomTime');
     const timeHeader = document.getElementById('timeHeader');
-
-    // ===== СЧЁТЧИК СЛУШАТЕЛЕЙ (рандом) =====
-    function updateListeners() {
-        // Имитация — меняется медленно, чтобы не дёргалось
-        const base = 12;
-        const variation = Math.floor(Math.random() * 15);
-        listenersCount = base + variation;
-        listenersEl.textContent = listenersCount;
-    }
-    updateListeners();
-    setInterval(updateListeners, 30000);
 
     // ===== ВРЕМЯ =====
     function updateTime() {
@@ -329,7 +335,7 @@
     document.addEventListener('mousemove', (e) => { if (isDragging) setProgress(e); });
     document.addEventListener('mouseup', () => { isDragging = false; });
 
-    // touch events
+    // touch
     progressTrack.addEventListener('touchstart', (e) => {
         isDragging = true;
         setProgress(e.touches[0]);
@@ -341,20 +347,20 @@
 
     // ===== ПЛЕЙЛИСТ =====
     function playTrack(index) {
-        if (!tracks.length) return;
-        const track = tracks[index];
+        if (!TRACKS.length) return;
+        const track = TRACKS[index];
         if (!track) return;
 
         document.getElementById('title').textContent = track.title || 'Untitled';
         document.getElementById('artist').textContent = track.artist || 'Unknown';
-        coverImg.src = track.cover || 'https://upload.wikimedia.org/wikipedia/en/a/a5/Kanyewest_collegedropout.jpg';
+        if (track.cover) {
+            coverImg.src = track.cover;
+        }
 
         audio.src = track.file;
         audio.load();
         if (playing) audio.play();
         updateBtn();
-
-        // Меняем фон под обложку
         extractColor(coverImg);
     }
 
@@ -371,7 +377,7 @@
     }
 
     function togglePlay() {
-        if (!tracks.length) return;
+        if (!TRACKS.length) return;
         if (audio.paused) {
             audio.play();
         } else {
@@ -381,11 +387,11 @@
     }
 
     function nextTrack() {
-        if (!tracks.length) return;
+        if (!TRACKS.length) return;
         let newIndex;
         do {
-            newIndex = Math.floor(Math.random() * tracks.length);
-        } while (tracks.length > 1 && newIndex === currentTrackIndex);
+            newIndex = Math.floor(Math.random() * TRACKS.length);
+        } while (TRACKS.length > 1 && newIndex === currentTrackIndex);
         currentTrackIndex = newIndex;
         playTrack(currentTrackIndex);
         if (playing) audio.play();
@@ -395,93 +401,38 @@
         nextTrack();
     }
 
-    function parseSongs(text) {
-        const lines = text.split('\n').filter(line => line.trim() && line.startsWith('http'));
-        const result = [];
-
-        for (const line of lines) {
-            const urlMatch = line.match(/^(https?:\/\/[^\s]+)/);
-            if (!urlMatch) continue;
-            const file = urlMatch[1];
-
-            const artistMatch = line.match(/\[([^\]]+)\]/);
-            const artist = artistMatch ? artistMatch[1] : 'Unknown';
-
-            const titleMatch = line.match(/<([^>]+)>/);
-            const title = titleMatch ? titleMatch[1] : 'Untitled';
-
-            const albumMatch = line.match(/#([^\s]+)/);
-            const album = albumMatch ? albumMatch[1] : '';
-            let cover = 'https://upload.wikimedia.org/wikipedia/en/a/a5/Kanyewest_collegedropout.jpg';
-            const a = album.toLowerCase();
-            if (a.includes('graduation')) {
-                cover = 'https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png';
-            } else if (a.includes('late') || a.includes('registration')) {
-                cover = 'https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg';
-            }
-
-            result.push({ file, artist, title, cover });
-        }
-        return result;
-    }
-
-    async function loadTracks() {
-        try {
-            const response = await fetch(SONGS_URL + '?' + Date.now());
-            const text = await response.text();
-            tracks = parseSongs(text);
-
-            if (!tracks.length) {
-                document.getElementById('title').textContent = '⚠️ Нет треков';
-                return;
-            }
-
-            currentTrackIndex = Math.floor(Math.random() * tracks.length);
-            playTrack(currentTrackIndex);
-        } catch (e) {
-            document.getElementById('title').textContent = '⚠️ Ошибка загрузки songs.txt';
-            console.error(e);
-        }
-    }
-
+    // ===== ЦВЕТ ИЗ ОБЛОЖКИ =====
     function extractColor(img) {
         if (!img.complete || !img.naturalWidth) {
             img.onload = () => extractColor(img);
             return;
         }
-
         try {
             const canvas = document.createElement('canvas');
             canvas.width = 50;
             canvas.height = 50;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, 50, 50);
-
             const data = ctx.getImageData(0, 0, 50, 50).data;
             let r = 0, g = 0, b = 0, count = 0;
-
             for (let i = 0; i < data.length; i += 4) {
                 const dr = data[i], dg = data[i+1], db = data[i+2];
-                // пропускаем слишком тёмные пиксели
                 if (dr + dg + db < 60) continue;
                 r += dr; g += dg; b += db;
                 count++;
             }
-
             if (count === 0) { r = 20; g = 20; b = 30; count = 1; }
             r = Math.floor(r / count);
             g = Math.floor(g / count);
             b = Math.floor(b / count);
-
-            // Делаем цвет приглушённым для фона
-            const bg = `rgb(${Math.floor(r*0.15)}, ${Math.floor(g*0.15)}, ${Math.floor(b*0.15)})`;
-            const containerBg = `rgba(${r*0.08}, ${g*0.08}, ${b*0.08}, 0.6)`;
-
+            const bg = `rgb(${Math.floor(r*0.12)}, ${Math.floor(g*0.12)}, ${Math.floor(b*0.12)})`;
+            const containerBg = `rgba(${r*0.06}, ${g*0.06}, ${b*0.06}, 0.5)`;
             document.body.style.background = bg;
             container.style.background = containerBg;
-        } catch (e) {}
+        } catch(e) {}
     }
 
+    // ===== СОБЫТИЯ =====
     audio.addEventListener('ended', nextTrack);
     audio.addEventListener('play', updateBtn);
     audio.addEventListener('pause', updateBtn);
@@ -494,13 +445,10 @@
     document.getElementById('next').addEventListener('click', nextTrack);
     document.getElementById('prev').addEventListener('click', prevTrack);
 
-    loadTracks();
-
-    setInterval(loadTracks, 60000);
+    // ===== СТАРТ =====
+    currentTrackIndex = Math.floor(Math.random() * TRACKS.length);
+    playTrack(currentTrackIndex);
 </script>
-
-</body>
-</html>
 
 </body>
 </html>
