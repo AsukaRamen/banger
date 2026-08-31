@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RADIO MIX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 460px;
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 28px 22px 22px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .station-name { font-size: 22px; font-weight: 800; color: #fff; }
+        .time { font-size: 13px; color: #444; font-weight: 300; }
+        .cover {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .track-info { text-align: center; margin-bottom: 14px; }
+        .title { font-size: 18px; font-weight: 700; margin-bottom: 2px; min-height: 26px; color: #fff; }
+        .artist { font-size: 14px; color: #666; min-height: 20px; }
+
+        .player-bar { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+        .time-current { font-size: 12px; color: #555; min-width: 40px; }
+        .time-total { font-size: 12px; color: #333; min-width: 40px; text-align: right; }
+        .progress-track { flex: 1; height: 4px; background: #1a1a1a; border-radius: 4px; cursor: pointer; position: relative; }
+        .progress-fill { height: 100%; width: 0%; background: #888; border-radius: 4px; transition: width 0.05s linear; }
+        .progress-track:hover .progress-fill { background: #fff; }
+
+        .controls { display: flex; justify-content: center; align-items: center; gap: 14px; }
+        .controls button {
+            background: transparent; border: none; color: #666; font-size: 22px;
+            cursor: pointer; transition: all 0.2s;
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .controls button:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        #play-btn {
+            font-size: 28px; width: 56px; height: 56px;
+            color: #fff; background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        #play-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+
+        .info { display: flex; justify-content: space-between; color: #333; font-size: 12px; margin-top: 14px; font-weight: 300; }
+
+        .footer { margin-top: 16px; text-align: center; color: #333; font-size: 12px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 14px; }
+        .footer span { color: #888; }
+
+        .waves { display: flex; align-items: center; justify-content: center; gap: 3px; height: 24px; margin: 6px 0 10px; }
+        .wave { width: 3px; height: 8px; background: #333; border-radius: 2px; transition: height 0.1s ease; }
+        .wave.active { background: #888; animation: wave 0.6s ease-in-out infinite alternate; }
+        .wave:nth-child(1) { animation-delay: 0s; height: 8px; }
+        .wave:nth-child(2) { animation-delay: 0.1s; height: 12px; }
+        .wave:nth-child(3) { animation-delay: 0.2s; height: 18px; }
+        .wave:nth-child(4) { animation-delay: 0.3s; height: 14px; }
+        .wave:nth-child(5) { animation-delay: 0.15s; height: 10px; }
+        .wave:nth-child(6) { animation-delay: 0.25s; height: 16px; }
+        .wave:nth-child(7) { animation-delay: 0.05s; height: 8px; }
+        .wave:nth-child(8) { animation-delay: 0.35s; height: 12px; }
+        @keyframes wave { 0% { height: 4px; } 100% { height: 20px; } }
+        .waves.paused .wave { animation: none; height: 6px !important; }
+
+        @media (max-width: 480px) {
+            .container { padding: 18px 14px; }
+            .station-name { font-size: 18px; }
+            .title { font-size: 16px; }
+            #play-btn { width: 48px; height: 48px; font-size: 24px; }
+            .controls button { width: 38px; height: 38px; font-size: 18px; }
+            .time-current, .time-total { font-size: 11px; min-width: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <span class="station-name">RADIO MIX</span>
+        <span class="time" id="time">--:--</span>
+    </div>
+
+    <img id="cover" class="cover"
+         src="https://upload.wikimedia.org/wikipedia/en/a/a5/Kanyewest_collegedropout.jpg"
+         alt="Обложка">
+
+    <div class="track-info">
+        <div class="title" id="title">Загрузка...</div>
+        <div class="artist" id="artist"></div>
+    </div>
+
+    <div class="player-bar">
+        <span class="time-current" id="time-current">0:00</span>
+        <div class="progress-track" id="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="time-total" id="time-total">0:00</span>
+    </div>
+
+    <div class="waves" id="waves">
+        <div class="wave"></div><div class="wave"></div><div class="wave"></div>
+        <div class="wave"></div><div class="wave"></div><div class="wave"></div>
+        <div class="wave"></div><div class="wave"></div>
+    </div>
+
+    <div class="controls">
+        <button id="prev">⏮</button>
+        <button id="play-btn">▶</button>
+        <button id="next">⏭</button>
+    </div>
+
+    <div class="info">
+        <span id="counter">0 / 0</span>
+    </div>
+
+    <div class="footer">
+        ❤️ <span>не зарабатывает</span> · просто музыка
+    </div>
+</div>
+
+<script>
+    // ===== ЗАМЕНИ НА СВОЙ РЕПОЗИТОРИЙ =====
+    const REPO = 'https://github.com/AsukaRamen/banger/';
+
+    let tracks = [];
+    let currentTrackIndex = 0;
+    let playing = false;
+    let isDragging = false;
+
+    const audio = new Audio();
+    const playBtn = document.getElementById('play-btn');
+    const progressFill = document.getElementById('progress-fill');
+    const progressTrack = document.getElementById('progress-track');
+    const timeCurrent = document.getElementById('time-current');
+    const timeTotal = document.getElementById('time-total');
+    const waves = document.getElementById('waves');
+
+    function formatTime(s) {
+        if (isNaN(s) || !isFinite(s)) return '0:00';
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    function updateProgress() {
+        if (!isDragging && audio.duration) {
+            progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+            timeCurrent.textContent = formatTime(audio.currentTime);
+        }
+    }
+
+    function setProgress(e) {
+        const rect = progressTrack.getBoundingClientRect();
+        const x = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        progressFill.style.width = x * 100 + '%';
+        audio.currentTime = x * audio.duration;
+        timeCurrent.textContent = formatTime(audio.currentTime);
+    }
+
+    progressTrack.addEventListener('mousedown', (e) => { isDragging = true; setProgress(e); });
+    document.addEventListener('mousemove', (e) => { if (isDragging) setProgress(e); });
+    document.addEventListener('mouseup', () => { isDragging = false; });
+
+    function updateTime() {
+        document.getElementById('time').textContent =
+            new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function playTrack(index) {
+        if (!tracks.length) return;
+        const track = tracks[index];
+        if (!track) return;
+
+        document.getElementById('title').textContent = track.title || 'Untitled';
+        document.getElementById('artist').textContent = track.artist || 'Unknown';
+        document.getElementById('cover').src = track.cover || 'https://upload.wikimedia.org/wikipedia/en/a/a5/Kanyewest_collegedropout.jpg';
+        document.getElementById('counter').textContent = `${index + 1} / ${tracks.length}`;
+
+        audio.src = track.file;
+        audio.load();
+        if (playing) audio.play();
+        updateBtn();
+    }
+
+    function updateBtn() {
+        if (audio.paused) {
+            playBtn.textContent = '▶';
+            playing = false;
+            waves.classList.add('paused');
+        } else {
+            playBtn.textContent = '⏸';
+            playing = true;
+            waves.classList.remove('paused');
+        }
+    }
+
+    function toggle() {
+        if (!tracks.length) return;
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+        updateBtn();
+    }
+
+    function nextTrack() {
+        if (!tracks.length) return;
+        // Рандомный трек, не тот же самый
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * tracks.length);
+        } while (tracks.length > 1 && newIndex === currentTrackIndex);
+        currentTrackIndex = newIndex;
+        playTrack(currentTrackIndex);
+        if (playing) audio.play();
+    }
+
+    function prevTrack() {
+        nextTrack(); // Просто рандом
+    }
+
+    // ===== ПАРСИМ songs.txt =====
+    function parseSongs(text) {
+        const lines = text.split('\n').filter(line => line.trim() && line.startsWith('http'));
+        const result = [];
+
+        for (const line of lines) {
+            const urlMatch = line.match(/^(https?:\/\/[^\s]+)/);
+            if (!urlMatch) continue;
+            const file = urlMatch[1];
+
+            const artistMatch = line.match(/\[([^\]]+)\]/);
+            const artist = artistMatch ? artistMatch[1] : 'Unknown';
+
+            const titleMatch = line.match(/<([^>]+)>/);
+            const title = titleMatch ? titleMatch[1] : 'Untitled';
+
+            const albumMatch = line.match(/#([^\s]+)/);
+            const album = albumMatch ? albumMatch[1] : '';
+            let cover = 'https://upload.wikimedia.org/wikipedia/en/a/a5/Kanyewest_collegedropout.jpg';
+            if (album.toLowerCase().includes('graduation')) {
+                cover = 'https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png';
+            } else if (album.toLowerCase().includes('late') || album.toLowerCase().includes('registration')) {
+                cover = 'https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg';
+            }
+
+            result.push({ file, artist, title, cover });
+        }
+
+        return result;
+    }
+
+    async function loadTracks() {
+        try {
+            const response = await fetch(REPO + 'songs.txt?' + Date.now());
+            const text = await response.text();
+            tracks = parseSongs(text);
+
+            if (!tracks.length) {
+                document.getElementById('title').textContent = '⚠️ Нет треков';
+                return;
+            }
+
+            // Первый раз — рандомный трек
+            currentTrackIndex = Math.floor(Math.random() * tracks.length);
+            playTrack(currentTrackIndex);
+        } catch (e) {
+            document.getElementById('title').textContent = '⚠️ Ошибка загрузки songs.txt';
+            console.error(e);
+        }
+    }
+
+    audio.addEventListener('ended', nextTrack);
+    audio.addEventListener('play', updateBtn);
+    audio.addEventListener('pause', updateBtn);
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', () => {
+        timeTotal.textContent = formatTime(audio.duration);
+    });
+
+    document.getElementById('play-btn').addEventListener('click', toggle);
+    document.getElementById('next').addEventListener('click', nextTrack);
+    document.getElementById('prev').addEventListener('click', prevTrack);
+
+    loadTracks();
+
+    setInterval(updateTime, 1000);
+
+    // Обновление плейлиста каждую минуту
+    setInterval(loadTracks, 60000);
+</script>
+
+</body>
+</html>
