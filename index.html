@@ -6,6 +6,8 @@
     <title>RADIO MIX</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* ===== ФОН — ОБЛОЖКА РАЗМЫТАЯ ===== */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #fff;
@@ -14,28 +16,49 @@
             align-items: center;
             justify-content: center;
             padding: 16px;
-            transition: background 0.8s ease;
             background: #121212;
+            position: relative;
+            overflow: hidden;
         }
+        
+        /* Сам фон — увеличенная и размытая обложка */
+        .bg-blur {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(60px) brightness(0.5);
+            transform: scale(1.2);
+            transition: background-image 0.8s ease;
+            z-index: 0;
+        }
+        
+        /* Затемнение сверху */
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+
         .container {
+            position: relative;
+            z-index: 2;
             max-width: 420px;
             width: 100%;
-            background: rgba(18,18,18,0.85);
+            background: rgba(18,18,18,0.7);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border-radius: 24px;
             padding: 24px 20px 20px;
             border: 1px solid rgba(255,255,255,0.04);
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            transition: background 0.8s ease;
         }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .station-name {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-            color: #fff;
-        }
+        .station-name { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: #fff; }
         .time-header { font-size: 13px; color: rgba(255,255,255,0.25); font-weight: 400; }
 
         .cover-wrap {
@@ -56,20 +79,8 @@
         }
 
         .track-info { text-align: center; margin-bottom: 12px; }
-        .title {
-            font-size: 19px;
-            font-weight: 600;
-            margin-bottom: 2px;
-            min-height: 26px;
-            color: #fff;
-            letter-spacing: -0.2px;
-        }
-        .artist {
-            font-size: 14px;
-            color: rgba(255,255,255,0.4);
-            min-height: 20px;
-            font-weight: 400;
-        }
+        .title { font-size: 19px; font-weight: 600; margin-bottom: 2px; min-height: 26px; color: #fff; letter-spacing: -0.2px; }
+        .artist { font-size: 14px; color: rgba(255,255,255,0.4); min-height: 20px; font-weight: 400; }
 
         .player-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .time-current, .time-total {
@@ -132,7 +143,6 @@
             border-color: rgba(255,255,255,0.15);
         }
 
-        /* ===== ГРОМКОСТЬ ===== */
         .volume-row {
             display: flex;
             align-items: center;
@@ -258,6 +268,10 @@
 </head>
 <body>
 
+<!-- ===== ФОН ===== -->
+<div class="bg-blur" id="bgBlur"></div>
+<div class="bg-overlay"></div>
+
 <div class="container" id="container">
     <div class="header">
         <span class="station-name">RADIO MIX</span>
@@ -265,7 +279,7 @@
     </div>
 
     <div class="cover-wrap">
-        <img id="cover" src="https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" alt="Обложка" crossorigin="anonymous">
+        <img id="cover" src="https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" alt="Обложка">
     </div>
 
     <div class="track-info">
@@ -293,7 +307,6 @@
         <button id="next">⏭</button>
     </div>
 
-    <!-- ===== ГРОМКОСТЬ ===== -->
     <div class="volume-row">
         <span class="volume-icon">🔊</span>
         <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
@@ -310,7 +323,7 @@
 </div>
 
 <script>
-    // ===== ВСЕ ТРЕКИ =====
+    // ===== ТРЕКИ =====
     const TRACKS = [
         { file: "https://ia601900.us.archive.org/17/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/02%20-%20We%20Don%27t%20Care.mp3", artist: "Kanye West", title: "We Don't Care", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
         { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/05%20-%20I%27ll%20Fly%20Away.mp3", artist: "Kanye West", title: "I'll Fly Away", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
@@ -359,13 +372,13 @@
         { file: "https://dl.dropboxusercontent.com/scl/fi/x1mfzc9e6nk6uymeh845a/bbno-1-800-feat.-Ironmouse.mp3?rlkey=9irhuwf64mqnktfmjebo2sz16&st=lkyjxu4p&dl=1", artist: "bbno$", title: "1-800", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F49e4a3ce69371cbdb11f5820a7917d43.1000x1000x1.png" },
     ];
 
-    // ===== КОД ПЛЕЕРА =====
+    // ===== КОД =====
     let currentTrackIndex = 0;
     let playing = false;
     let isDragging = false;
 
     const audio = new Audio();
-    const container = document.getElementById('container');
+    const bgBlur = document.getElementById('bgBlur');
     const coverImg = document.getElementById('cover');
     const playBtn = document.getElementById('playBtn');
     const progressFill = document.getElementById('progressFill');
@@ -441,16 +454,17 @@
 
         document.getElementById('title').textContent = track.title || 'Untitled';
         document.getElementById('artist').textContent = track.artist || 'Unknown';
+        
         if (track.cover) {
             coverImg.src = track.cover;
+            // ===== ФОН МЕНЯЕТСЯ ТУТ =====
+            bgBlur.style.backgroundImage = `url(${track.cover})`;
         }
 
         audio.src = track.file;
         audio.load();
         if (playing) audio.play();
         updateBtn();
-
-        setTimeout(() => extractColor(coverImg), 300);
     }
 
     function updateBtn() {
@@ -488,43 +502,6 @@
 
     function prevTrack() {
         nextTrack();
-    }
-
-    // ===== ФОН ИЗ ОБЛОЖКИ =====
-    function extractColor(img) {
-        if (!img.complete || !img.naturalWidth) {
-            img.onload = () => extractColor(img);
-            return;
-        }
-
-        try {
-            const canvas = document.createElement('canvas');
-            canvas.width = 50;
-            canvas.height = 50;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, 50, 50);
-            const data = ctx.getImageData(0, 0, 50, 50).data;
-
-            let r = 0, g = 0, b = 0, count = 0;
-            for (let i = 0; i < data.length; i += 4) {
-                const dr = data[i], dg = data[i+1], db = data[i+2];
-                if (dr + dg + db < 60) continue;
-                r += dr; g += dg; b += db;
-                count++;
-            }
-            if (count === 0) { r = 20; g = 20; b = 30; count = 1; }
-            r = Math.floor(r / count);
-            g = Math.floor(g / count);
-            b = Math.floor(b / count);
-
-            const bg = `rgb(${Math.floor(r*0.1)}, ${Math.floor(g*0.1)}, ${Math.floor(b*0.1)})`;
-            const containerBg = `rgba(${r*0.04}, ${g*0.04}, ${b*0.04}, 0.7)`;
-
-            document.body.style.background = bg;
-            document.body.style.transition = 'background 0.8s ease';
-            container.style.background = containerBg;
-            container.style.transition = 'background 0.8s ease';
-        } catch(e) {}
     }
 
     audio.addEventListener('ended', nextTrack);
