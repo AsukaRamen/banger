@@ -575,11 +575,33 @@
             audio.src = track.file;
             audio.load();
             
-            // Автоматически включаем, если плеер был запущен
             if (playing) {
                 audio.play().catch(e => console.log('Автовоспроизведение заблокировано'));
             }
             updateBtn();
+
+            // ===== MEDIA SESSION API (для Андроид) =====
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: track.title || 'Untitled',
+                    artist: track.artist || 'Unknown',
+                    album: 'RADIO MIX',
+                    artwork: [
+                        { src: track.cover || 'https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg', sizes: '512x512', type: 'image/jpeg' }
+                    ]
+                });
+
+                navigator.mediaSession.setActionHandler('play', () => {
+                    audio.play();
+                    updateBtn();
+                });
+                navigator.mediaSession.setActionHandler('pause', () => {
+                    audio.pause();
+                    updateBtn();
+                });
+                navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
+                navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
+            }
         }
 
         function updateBtn() {
@@ -613,7 +635,6 @@
             currentTrackIndex = newIndex;
             playTrack(currentTrackIndex);
             
-            // Автоматически включаем следующий трек
             if (playing) {
                 audio.play().catch(e => console.log('Автовоспроизведение заблокировано'));
             }
@@ -623,15 +644,27 @@
             nextTrack();
         }
 
+        // ===== ДЛЯ ПК: продолжаем играть в фоновой вкладке =====
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && playing && audio.paused) {
+                audio.play().catch(e => console.log('Не удалось возобновить'));
+            }
+        });
+
+        // ===== ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДКИ =====
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && playing && audio.paused) {
+                audio.play().catch(e => console.log('Не удалось возобновить'));
+            }
+        });
+
         // ===== СОБЫТИЯ =====
-        // Когда трек загрузился — включаем
         audio.addEventListener('canplay', function() {
             if (playing) {
                 audio.play().catch(e => console.log('Автовоспроизведение заблокировано'));
             }
         });
 
-        // Когда трек закончился — следующий
         audio.addEventListener('ended', nextTrack);
         audio.addEventListener('play', updateBtn);
         audio.addEventListener('pause', updateBtn);
@@ -646,7 +679,7 @@
 
         // ===== СТАРТ =====
         currentTrackIndex = Math.floor(Math.random() * TRACKS.length);
-        playing = true; // Сразу включаем режим воспроизведения
+        playing = true;
         playTrack(currentTrackIndex);
     </script>
 
