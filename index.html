@@ -7,7 +7,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* ===== ФОН — ОБЛОЖКА РАЗМЫТАЯ ===== */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #fff;
@@ -21,7 +20,6 @@
             overflow: hidden;
         }
         
-        /* Сам фон — увеличенная и размытая обложка */
         .bg-blur {
             position: fixed;
             top: -50%;
@@ -36,7 +34,6 @@
             z-index: 0;
         }
         
-        /* Затемнение сверху */
         .bg-overlay {
             position: fixed;
             inset: 0;
@@ -194,17 +191,7 @@
             font-variant-numeric: tabular-nums;
         }
 
-        .bottom-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.04);
-            font-size: 12px;
-            color: rgba(255,255,255,0.15);
-        }
-        .bottom-time { font-size: 12px; color: rgba(255,255,255,0.15); }
+        /* ===== УБРАЛИ bottom-row (время внизу) ===== */
 
         .footer-note {
             margin-top: 12px;
@@ -214,6 +201,36 @@
             letter-spacing: 0.3px;
         }
         .footer-note span { color: rgba(255,255,255,0.15); }
+
+        /* ===== ДОНАТ В НИЖНЕМ ЛЕВОМ УГЛУ ===== */
+        .donate-corner {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 100;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+        .donate-corner:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border-color: rgba(255,255,255,0.15);
+        }
+        .donate-corner svg {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
 
         .waves {
             display: flex;
@@ -255,14 +272,25 @@
             .cover-wrap { border-radius: 12px; }
             #play-btn { width: 48px; height: 48px; font-size: 24px; }
             .controls button { width: 36px; height: 36px; font-size: 17px; }
-            .bottom-row { font-size: 11px; flex-wrap: wrap; gap: 6px; justify-content: center; }
             .time-current, .time-total { font-size: 10px; min-width: 30px; }
             .volume-slider::-webkit-slider-thumb { width: 11px; height: 11px; }
+            .donate-corner {
+                bottom: 16px;
+                left: 16px;
+                font-size: 11px;
+                padding: 6px 12px;
+            }
         }
         @media (max-width: 380px) {
             .container { padding: 14px 10px 10px; }
             .station-name { font-size: 15px; }
             .title { font-size: 14px; }
+            .donate-corner {
+                bottom: 12px;
+                left: 12px;
+                font-size: 10px;
+                padding: 4px 10px;
+            }
         }
     </style>
 </head>
@@ -271,6 +299,17 @@
 <!-- ===== ФОН ===== -->
 <div class="bg-blur" id="bgBlur"></div>
 <div class="bg-overlay"></div>
+
+<!-- ===== ДОНАТ В НИЖНЕМ ЛЕВОМ УГЛУ (НА АНГЛИЙСКОМ) ===== -->
+<a href="https://bit.ly/4h6pgRZ" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   class="donate-corner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+    Support with a donation
+</a>
 
 <div class="container" id="container">
     <div class="header">
@@ -313,12 +352,10 @@
         <span class="volume-percent" id="volumePercent">80%</span>
     </div>
 
-    <div class="bottom-row">
-        <span class="bottom-time" id="bottomTime">--:--</span>
-    </div>
+    <!-- bottom-row УДАЛЁН -->
 
     <div class="footer-note">
-        ❤️ <span>не зарабатывает</span> · просто музыка
+        ❤️ <span>does not make money</span> · just music
     </div>
 </div>
 
@@ -386,7 +423,6 @@
     const timeCurrent = document.getElementById('timeCurrent');
     const timeTotal = document.getElementById('timeTotal');
     const waves = document.getElementById('waves');
-    const bottomTime = document.getElementById('bottomTime');
     const timeHeader = document.getElementById('timeHeader');
     const volumeSlider = document.getElementById('volumeSlider');
     const volumePercent = document.getElementById('volumePercent');
@@ -406,7 +442,6 @@
         const now = new Date();
         const str = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         timeHeader.textContent = str;
-        bottomTime.textContent = str;
     }
     updateTime();
     setInterval(updateTime, 1000);
@@ -457,7 +492,6 @@
         
         if (track.cover) {
             coverImg.src = track.cover;
-            // ===== ФОН МЕНЯЕТСЯ ТУТ =====
             bgBlur.style.backgroundImage = `url(${track.cover})`;
         }
 
