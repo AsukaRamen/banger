@@ -15,33 +15,38 @@
             justify-content: center;
             padding: 16px;
             transition: background 0.8s ease;
-            background: #0a0a0a;
+            background: #121212;
         }
         .container {
             max-width: 420px;
             width: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(18,18,18,0.85);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            border-radius: 28px;
+            border-radius: 24px;
             padding: 24px 20px 20px;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             transition: background 0.8s ease;
         }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .station-name { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-        .time-header { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 300; }
+        .station-name {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #fff;
+        }
+        .time-header { font-size: 13px; color: rgba(255,255,255,0.25); font-weight: 400; }
 
         .cover-wrap {
             position: relative;
             width: 100%;
             aspect-ratio: 1/1;
-            border-radius: 18px;
+            border-radius: 16px;
             overflow: hidden;
             margin-bottom: 16px;
-            background: #111;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            background: #181818;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         .cover-wrap img {
             width: 100%;
@@ -50,22 +55,34 @@
             display: block;
         }
 
-        .track-info { text-align: center; margin-bottom: 14px; }
-        .title { font-size: 19px; font-weight: 700; margin-bottom: 2px; min-height: 26px; }
-        .artist { font-size: 14px; color: rgba(255,255,255,0.5); min-height: 20px; }
+        .track-info { text-align: center; margin-bottom: 12px; }
+        .title {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            min-height: 26px;
+            color: #fff;
+            letter-spacing: -0.2px;
+        }
+        .artist {
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+            min-height: 20px;
+            font-weight: 400;
+        }
 
-        .player-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .player-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .time-current, .time-total {
             font-size: 11px;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255,255,255,0.25);
             min-width: 36px;
             font-variant-numeric: tabular-nums;
         }
         .time-total { text-align: right; }
         .progress-track {
             flex: 1;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
+            height: 3px;
+            background: rgba(255,255,255,0.06);
             border-radius: 4px;
             cursor: pointer;
             position: relative;
@@ -73,64 +90,120 @@
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: #fff;
+            background: rgba(255,255,255,0.7);
             border-radius: 4px;
             transition: width 0.05s linear;
         }
-        .progress-track:hover .progress-fill { background: #1db954; }
+        .progress-track:hover .progress-fill { background: #fff; }
 
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 18px;
-            margin: 4px 0 2px;
+            gap: 12px;
+            margin: 2px 0;
         }
         .controls button {
             background: transparent;
             border: none;
-            color: rgba(255,255,255,0.5);
-            font-size: 22px;
+            color: rgba(255,255,255,0.35);
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.2s;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .controls button:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .controls button:hover { color: #fff; background: rgba(255,255,255,0.04); }
         #play-btn {
-            font-size: 30px;
-            width: 58px;
-            height: 58px;
+            font-size: 28px;
+            width: 56px;
+            height: 56px;
             color: #fff;
             background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.06);
         }
-        #play-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); }
+        #play-btn:hover {
+            background: rgba(255,255,255,0.14);
+            transform: scale(1.04);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        /* ===== ГРОМКОСТЬ ===== */
+        .volume-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0 2px;
+            padding: 0 4px;
+        }
+        .volume-icon {
+            font-size: 14px;
+            color: rgba(255,255,255,0.2);
+            min-width: 22px;
+        }
+        .volume-slider {
+            flex: 1;
+            height: 3px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255,255,255,0.06);
+            border-radius: 4px;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            cursor: pointer;
+            border: none;
+        }
+        .volume-slider:hover { background: rgba(255,255,255,0.1); }
+        .volume-slider::-webkit-slider-thumb:hover { background: #fff; }
+        .volume-slider::-moz-range-thumb:hover { background: #fff; }
+        .volume-percent {
+            font-size: 11px;
+            color: rgba(255,255,255,0.2);
+            min-width: 34px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
 
         .bottom-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.04);
             font-size: 12px;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.15);
         }
-        .bottom-time { font-size: 12px; color: rgba(255,255,255,0.25); }
+        .bottom-time { font-size: 12px; color: rgba(255,255,255,0.15); }
 
         .footer-note {
-            margin-top: 14px;
+            margin-top: 12px;
             text-align: center;
             font-size: 11px;
-            color: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.08);
             letter-spacing: 0.3px;
         }
-        .footer-note span { color: rgba(255,255,255,0.3); }
+        .footer-note span { color: rgba(255,255,255,0.15); }
 
         .waves {
             display: flex;
@@ -138,17 +211,17 @@
             justify-content: center;
             gap: 3px;
             height: 22px;
-            margin: 4px 0 6px;
+            margin: 2px 0 4px;
         }
         .wave {
             width: 3px;
             height: 6px;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
             border-radius: 2px;
             transition: height 0.1s ease;
         }
         .wave.active {
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.3);
             animation: waveAnim 0.6s ease-in-out infinite alternate;
         }
         .wave:nth-child(1) { animation-delay: 0s; height: 6px; }
@@ -163,17 +236,18 @@
             0% { height: 4px; }
             100% { height: 18px; }
         }
-        .waves.paused .wave { animation: none; height: 5px !important; background: rgba(255,255,255,0.06); }
+        .waves.paused .wave { animation: none; height: 5px !important; background: rgba(255,255,255,0.04); }
 
         @media (max-width: 480px) {
-            .container { padding: 18px 14px 14px; border-radius: 20px; }
+            .container { padding: 18px 14px 14px; border-radius: 18px; }
             .station-name { font-size: 17px; }
             .title { font-size: 16px; }
-            .cover-wrap { border-radius: 14px; }
-            #play-btn { width: 50px; height: 50px; font-size: 24px; }
-            .controls button { width: 38px; height: 38px; font-size: 18px; }
+            .cover-wrap { border-radius: 12px; }
+            #play-btn { width: 48px; height: 48px; font-size: 24px; }
+            .controls button { width: 36px; height: 36px; font-size: 17px; }
             .bottom-row { font-size: 11px; flex-wrap: wrap; gap: 6px; justify-content: center; }
             .time-current, .time-total { font-size: 10px; min-width: 30px; }
+            .volume-slider::-webkit-slider-thumb { width: 11px; height: 11px; }
         }
         @media (max-width: 380px) {
             .container { padding: 14px 10px 10px; }
@@ -191,7 +265,7 @@
     </div>
 
     <div class="cover-wrap">
-        <img id="cover" src="https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" alt="Обложка">
+        <img id="cover" src="https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" alt="Обложка" crossorigin="anonymous">
     </div>
 
     <div class="track-info">
@@ -219,6 +293,13 @@
         <button id="next">⏭</button>
     </div>
 
+    <!-- ===== ГРОМКОСТЬ ===== -->
+    <div class="volume-row">
+        <span class="volume-icon">🔊</span>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
+        <span class="volume-percent" id="volumePercent">80%</span>
+    </div>
+
     <div class="bottom-row">
         <span class="bottom-time" id="bottomTime">--:--</span>
     </div>
@@ -239,29 +320,29 @@
         { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/09%20-%20Get%20Em%20High.mp3", artist: "Kanye West", title: "Get Em High", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
         { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/12%20-%20Slow%20Jamz.mp3", artist: "Kanye West", title: "Slow Jamz", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
         { file: "https://dn720006.ca.archive.org/0/items/kanye-west-the-college-dropout_202605/Kanye%20West%20-%20The%20College%20Dropout/20%20-%20Family%20Business.mp3", artist: "Kanye West", title: "Family Business", cover: "https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/01.%20Good%20Morning.mp3", artist: "Kanye West", title: "Good Morning", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
-        { file: "https://ia800508.us.archive.org/22/items/kanyewest-graduation/02.%20Champion.mp3", artist: "Kanye West", title: "Champion", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/03.%20Stronger.mp3", artist: "Kanye West", title: "Stronger", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/04.%20I%20Wonder.mp3", artist: "Kanye West", title: "I Wonder", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/05.%20Good%20Life%20%28Feat.%20T-Pain%29.mp3", artist: "Kanye West and T-Pain", title: "Good Life", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/06.%20Can%27t%20Tell%20Me%20Nothing.mp3", artist: "Kanye West", title: "Can't Tell Me Nothing", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/07.%20Barry%20Bonds%20%28Feat.%20Lil%27%20Wayne%29.mp3", artist: "Kanye West and Lil' Wayne", title: "Barry Bonds", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/08.%20Drunk%20%26%20Hot%20Girls%20%28Feat.%20Mos%20Def%29.mp3", artist: "Kanye West and Mos Def", title: "Drunk & Hot Girls", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/09.%20Flashing%20Lights%20%28Feat.%20Dwele%29.mp3", artist: "Kanye West and Dwele", title: "Flashing Lights", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/10.%20Everything%20I%20Am%20%28Feat.%20DJ%20Premier%29.mp3", artist: "Kanye West and DJ Premier", title: "Everything I Am", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/11.%20The%20Glory.mp3", artist: "Kanye West", title: "The Glory", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/12.%20Homecoming.mp3", artist: "Kanye West", title: "Homecoming", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/13.%20Big%20Brother.mp3", artist: "Kanye West", title: "Big Brother", cover: "https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" },
-        { file: "https://ia902904.us.archive.org/33/items/lateregistration_202605/02.%20Heard%20%27Em%20Say%20%28Feat.%20Adam%20Levine%29.mp3", artist: "Kanye West and Adam Levine", title: "Heard 'Em Say", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg" },
-        { file: "https://dn711101.ca.archive.org/0/items/lateregistration_202605/03.%20Touch%20The%20Sky%20%28Feat.%20Lupe%20Fiasco%29.mp3", artist: "Kanye West and Lupe Fiasco", title: "Touch The Sky", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg" },
-        { file: "https://dn711101.ca.archive.org/0/items/lateregistration_202605/06.%20Drive%20Slow%20%28Feat.%20Paul%20Wall%20%26%20GLC%29.mp3", artist: "Kanye West and Paul Wall, GLC", title: "Drive Slow", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/220px-Late_registration_cover.jpg" },
-        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/14.%20Good%20Night%20%28Feat.%20Al%20Be%20Back%20%26%20Mos%20Def%29.mp3", artist: "Kanye West and Al Be Back, Mos Def", title: "Good Night", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/220px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/01.%20Good%20Morning.mp3", artist: "Kanye West", title: "Good Morning", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://ia800508.us.archive.org/22/items/kanyewest-graduation/02.%20Champion.mp3", artist: "Kanye West", title: "Champion", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/03.%20Stronger.mp3", artist: "Kanye West", title: "Stronger", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/04.%20I%20Wonder.mp3", artist: "Kanye West", title: "I Wonder", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/05.%20Good%20Life%20%28Feat.%20T-Pain%29.mp3", artist: "Kanye West and T-Pain", title: "Good Life", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/06.%20Can%27t%20Tell%20Me%20Nothing.mp3", artist: "Kanye West", title: "Can't Tell Me Nothing", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/07.%20Barry%20Bonds%20%28Feat.%20Lil%27%20Wayne%29.mp3", artist: "Kanye West and Lil' Wayne", title: "Barry Bonds", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/08.%20Drunk%20%26%20Hot%20Girls%20%28Feat.%20Mos%20Def%29.mp3", artist: "Kanye West and Mos Def", title: "Drunk & Hot Girls", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/09.%20Flashing%20Lights%20%28Feat.%20Dwele%29.mp3", artist: "Kanye West and Dwele", title: "Flashing Lights", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/10.%20Everything%20I%20Am%20%28Feat.%20DJ%20Premier%29.mp3", artist: "Kanye West and DJ Premier", title: "Everything I Am", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/11.%20The%20Glory.mp3", artist: "Kanye West", title: "The Glory", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/12.%20Homecoming.mp3", artist: "Kanye West", title: "Homecoming", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/13.%20Big%20Brother.mp3", artist: "Kanye West", title: "Big Brother", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://dn710800.ca.archive.org/0/items/kanyewest-graduation/14.%20Good%20Night%20%28Feat.%20Al%20Be%20Back%20%26%20Mos%20Def%29.mp3", artist: "Kanye West and Al Be Back, Mos Def", title: "Good Night", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Graduation_%28Kanye_West_album%29_cover.png/320px-Graduation_%28Kanye_West_album%29_cover.png" },
+        { file: "https://ia902904.us.archive.org/33/items/lateregistration_202605/02.%20Heard%20%27Em%20Say%20%28Feat.%20Adam%20Levine%29.mp3", artist: "Kanye West and Adam Levine", title: "Heard 'Em Say", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/320px-Late_registration_cover.jpg" },
+        { file: "https://dn711101.ca.archive.org/0/items/lateregistration_202605/03.%20Touch%20The%20Sky%20%28Feat.%20Lupe%20Fiasco%29.mp3", artist: "Kanye West and Lupe Fiasco", title: "Touch The Sky", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/320px-Late_registration_cover.jpg" },
+        { file: "https://dn711101.ca.archive.org/0/items/lateregistration_202605/06.%20Drive%20Slow%20%28Feat.%20Paul%20Wall%20%26%20GLC%29.mp3", artist: "Kanye West and Paul Wall, GLC", title: "Drive Slow", cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Late_registration_cover.jpg/320px-Late_registration_cover.jpg" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/civh81wpwh4bypezj39sw/SWIFT.mp3?rlkey=ebdkygrwwo4rvwsaem5jhlr7f&st=9eicdlxb&dl=1", artist: "CMH", title: "SWIFT", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F0d6041464c80b5aa35689a228ffed993.1000x1000x1.png" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/kumq0ygky7cjixb2f4633/MI-FIT.mp3?rlkey=4qmcm21yl59ylwi0nvtep25ar&st=45khmct0&dl=1", artist: "CMH", title: "MI$FIT$", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F0d6041464c80b5aa35689a228ffed993.1000x1000x1.png" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/9gamhz2r7vpswqaukrqkw/RAWW.mp3?rlkey=l4o6tr3w9pgw0ao2287yb7p6j&st=akfrntba&dl=1", artist: "CMH", title: "RAWW", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F0d6041464c80b5aa35689a228ffed993.1000x1000x1.png" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/5oxqtlc1ujddanzfoq7fv/KUVALDA.mp3?rlkey=z2lycujjke3ixddiuoqvpal0e&st=1snusca6&dl=1", artist: "CMH", title: "KUVALDA", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F0d6041464c80b5aa35689a228ffed993.1000x1000x1.png" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/9wtam14oni95e52ejxoub/CMH-TYPE-BEAT.mp3?rlkey=nmlkifqkgwz0y7hsqsqz8xs73&st=lachu8z2&dl=1", artist: "CMH", title: "CMH TYPE BEAT", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F0d6041464c80b5aa35689a228ffed993.1000x1000x1.png" },
-        { file: "https://dl.dropboxusercontent.com/scl/fi/quvab3f6lgfxyrw1fazo5/WRONG.mp3?rlkey=ik49ezdtetvqwmwdhfxrepr6c&st=g90255ay&dl=1", artist: "CMH", title: "WRONG", cover: "https://t2.genius.com/unsafe/281x0/https%3A%2F%2Fimages.genius.com%2F5bc5724aad611482651d3e6ee7297f35.1000x1000x1.png" },
+        { file: "https://dl.dropboxusercontent.com/scl/fi/quvab3f6lgfxyrw1fazo5/WRONG.mp3?rlkey=ik49ezdtetvqwmwdhfxrepr6c&st=g90255ay&dl=1", artist: "CMH", title: "WRONG", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F5bc5724aad611482651d3e6ee7297f35.1000x1000x1.png" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/jj3f0386h7dz9ca8tqi8i/01.mp3?rlkey=31zy0unq0swoom6nica7ygtan&st=36pctxxm&dl=1", artist: "madk1d", title: "так похуй", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F16d316dac52ddf6dbab845c92ce3b4ae.1000x1000x1.png" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/kjxq57vu2trbryl2luoo1/02-Ft..mp3?rlkey=t52wy8mkcgptioxijmaq0cwdw&st=eb60mco5&dl=1", artist: "madk1d and паранойя", title: "цена", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F16d316dac52ddf6dbab845c92ce3b4ae.1000x1000x1.png" },
         { file: "https://dl.dropboxusercontent.com/scl/fi/r6w8s6fbtn6i6n2j14hdr/03-Ft..mp3?rlkey=vtj79v4h3o9z5132ofsfs0ix9&st=6maytwuw&dl=1", artist: "madk1d and тёмный принц", title: "ты че обиделась", cover: "https://t2.genius.com/unsafe/323x323/https%3A%2F%2Fimages.genius.com%2F16d316dac52ddf6dbab845c92ce3b4ae.1000x1000x1.png" },
@@ -294,6 +375,19 @@
     const waves = document.getElementById('waves');
     const bottomTime = document.getElementById('bottomTime');
     const timeHeader = document.getElementById('timeHeader');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumePercent = document.getElementById('volumePercent');
+
+    // ===== ГРОМКОСТЬ =====
+    audio.volume = 0.8;
+    volumeSlider.value = 0.8;
+    volumePercent.textContent = '80%';
+
+    volumeSlider.addEventListener('input', function() {
+        const val = parseFloat(this.value);
+        audio.volume = val;
+        volumePercent.textContent = Math.round(val * 100) + '%';
+    });
 
     function updateTime() {
         const now = new Date();
@@ -355,7 +449,8 @@
         audio.load();
         if (playing) audio.play();
         updateBtn();
-        extractColor(coverImg);
+
+        setTimeout(() => extractColor(coverImg), 300);
     }
 
     function updateBtn() {
@@ -395,12 +490,13 @@
         nextTrack();
     }
 
-    // ===== ЦВЕТ ИЗ ОБЛОЖКИ =====
+    // ===== ФОН ИЗ ОБЛОЖКИ =====
     function extractColor(img) {
         if (!img.complete || !img.naturalWidth) {
             img.onload = () => extractColor(img);
             return;
         }
+
         try {
             const canvas = document.createElement('canvas');
             canvas.width = 50;
@@ -408,6 +504,7 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, 50, 50);
             const data = ctx.getImageData(0, 0, 50, 50).data;
+
             let r = 0, g = 0, b = 0, count = 0;
             for (let i = 0; i < data.length; i += 4) {
                 const dr = data[i], dg = data[i+1], db = data[i+2];
@@ -419,10 +516,14 @@
             r = Math.floor(r / count);
             g = Math.floor(g / count);
             b = Math.floor(b / count);
-            const bg = `rgb(${Math.floor(r*0.12)}, ${Math.floor(g*0.12)}, ${Math.floor(b*0.12)})`;
-            const containerBg = `rgba(${r*0.06}, ${g*0.06}, ${b*0.06}, 0.5)`;
+
+            const bg = `rgb(${Math.floor(r*0.1)}, ${Math.floor(g*0.1)}, ${Math.floor(b*0.1)})`;
+            const containerBg = `rgba(${r*0.04}, ${g*0.04}, ${b*0.04}, 0.7)`;
+
             document.body.style.background = bg;
+            document.body.style.transition = 'background 0.8s ease';
             container.style.background = containerBg;
+            container.style.transition = 'background 0.8s ease';
         } catch(e) {}
     }
 
